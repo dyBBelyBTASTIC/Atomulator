@@ -508,7 +508,7 @@ void enterfullscreen()
 	fs_dispx = (SCREEN_W - fs_dispw) / 2;
 	fs_dispy = (SCREEN_H - fs_disph) / 2;
 
-	clear_to_color(screen, makecol(0, 0, 0));
+	clear_to_color(screen, makecol_depth(bitmap_color_depth(screen), 0, 0, 0));
 }
 
 void leavefullscreen()
