@@ -7,6 +7,12 @@
 #include "atom.h"
 #include "avi.h"
 
+#ifdef WIN32
+#include <winalleg.h>
+extern HWND ghwnd;
+extern HMENU ghmenu;
+#endif
+
 int fullscreen = 0;
 int winsizex = 512, winsizey = 384;
 
@@ -489,6 +495,7 @@ void enterfullscreen()
         }*/
 	#ifdef WIN32
 	destroy_bitmap(b2);
+	SetMenu(ghwnd, NULL);
 	#endif
 
 	set_color_depth(depth);
@@ -496,6 +503,7 @@ void enterfullscreen()
 
 	#ifdef WIN32
 	b2 = create_video_bitmap(256, 192);
+	SetMenu(ghwnd, ghmenu);
 	#endif
 
 	set_color_depth(8);
