@@ -496,6 +496,7 @@ void enterfullscreen()
 	#ifdef WIN32
 	destroy_bitmap(b2);
 	SetMenu(ghwnd, NULL);
+	DrawMenuBar(ghwnd);
 	#endif
 
 	set_color_depth(depth);
@@ -503,7 +504,6 @@ void enterfullscreen()
 
 	#ifdef WIN32
 	b2 = create_video_bitmap(256, 192);
-	SetMenu(ghwnd, ghmenu);
 	#endif
 
 	set_color_depth(8);
@@ -541,6 +541,8 @@ void leavefullscreen()
         }*/
 	#ifdef WIN32
 	destroy_bitmap(b2);
+	SetMenu(ghwnd, ghmenu);
+	DrawMenuBar(ghwnd);
 	#endif
 
 	set_color_depth(depth);
