@@ -434,6 +434,19 @@ void drawline(int line)
 			blit(b, b2, 0, 0, 0, 0, 256, 192);
 			if (fullscreen)
 			{
+				int black = makecol_depth(bitmap_color_depth(screen), 0, 0, 0);
+
+				if (fs_dispx > 0)
+				{
+					rectfill(screen, 0, 0, fs_dispx - 1, SCREEN_H - 1, black);
+					rectfill(screen, fs_dispx + fs_dispw, 0, SCREEN_W - 1, SCREEN_H - 1, black);
+				}
+				if (fs_dispy > 0)
+				{
+					rectfill(screen, 0, 0, SCREEN_W - 1, fs_dispy - 1, black);
+					rectfill(screen, 0, fs_dispy + fs_disph, SCREEN_W - 1, SCREEN_H - 1, black);
+				}
+
 				stretch_blit(b2, screen, 0, 0, 256, 192, fs_dispx, fs_dispy, fs_dispw, fs_disph);
 				if (tapeon)
 					rectfill(screen, fs_dispx + fs_dispw - 24, fs_dispy, fs_dispx + fs_dispw - 1, fs_dispy + 8, makecol(255, 0, 0));
