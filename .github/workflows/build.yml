@@ -17,6 +17,7 @@ jobs:
     env:
       BUILD_TOOL_BIN: C:/mingw32/bin
       INCLUDE: C:/mingw32/include
+      CMAKE_POLICY_VERSION_MINIMUM: "3.5"      
 
     steps:
     - uses: actions/checkout@v4
@@ -40,7 +41,6 @@ jobs:
       run: |
         $env:Path = "$env:BUILD_TOOL_BIN;" + $env:Path
         cmake -Wno-dev `
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
         -DCMAKE_BUILD_TYPE:STRING="RelWithDebInfo" `
         -DCMAKE_COLOR_MAKEFILE:BOOL="0" `
         -DCMAKE_C_COMPILER:FILEPATH="gcc.exe" `
@@ -91,7 +91,6 @@ jobs:
       run: |
         $env:Path = "$env:BUILD_TOOL_BIN;" + $env:Path
         cmake -G "MinGW Makefiles" `
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
         -DALSOFT_TESTS=ON `
         -DALSOFT_BUILD_ROUTER=ON `
         -DALSOFT_REQUIRE_WINMM=ON `
@@ -125,7 +124,6 @@ jobs:
       run: |
         $env:Path = "$env:BUILD_TOOL_BIN;" + $env:Path
         cmake -G "MinGW Makefiles" `
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
         -DOPENAL_INCLUDE_DIR:FILEPATH="$env:GITHUB_WORKSPACE/lib/openal-soft/include" `
         -DOPENAL_LIBRARY:FILEPATH="$env:GITHUB_WORKSPACE/lib/openal-soft/build/OpenAL32.dll" `
         ..
