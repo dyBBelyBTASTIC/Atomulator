@@ -500,7 +500,18 @@ void enterfullscreen()
 	#endif
 
 	set_color_depth(depth);
-	set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, FULLSCREEN_W, FULLSCREEN_H, 0, 0);
+	{
+	/* Try to match whatever resolution the desktop is actually
+	   running at; fall back to the fixed FULLSCREEN_W/H constants
+	   if Allegro can't detect it for some reason. */
+	int reqw = FULLSCREEN_W, reqh = FULLSCREEN_H;
+	if (get_desktop_resolution(&reqw, &reqh) != 0)
+	{
+		reqw = FULLSCREEN_W;
+		reqh = FULLSCREEN_H;
+	}
+	set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, reqw, reqh, 0, 0);
+	}
 
 	#ifdef WIN32
 	b2 = create_video_bitmap(256, 192);
