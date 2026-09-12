@@ -18,6 +18,7 @@ HWND hwndCat;
 int infocus = 1;
 
 HWND ghwnd;
+HMENU ghmenu = NULL;
 char szClassName[]  = "WindowsApp";
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -90,6 +91,7 @@ int createwindow(HINSTANCE hThisInstance, int nFunsterStil)
 
 	/* Make the window visible on the screen */
 	ShowWindow(ghwnd, nFunsterStil);
+	ghmenu = GetMenu(ghwnd);
 	set_display_switch_mode(SWITCH_BACKGROUND);
 	set_display_switch_mode(SWITCH_BACKAMNESIA);
 	win_set_window(ghwnd);
