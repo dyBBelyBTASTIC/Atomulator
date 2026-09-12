@@ -10,6 +10,16 @@
 int fullscreen = 0;
 int winsizex = 512, winsizey = 384;
 
+/* Fullscreen target resolution */
+#define FULLSCREEN_W 2560
+#define FULLSCREEN_H 1440
+
+/* Computed 4:3 letterbox/pillarbox rectangle within the fullscreen mode,
+   set up in enterfullscreen() and used every frame so the emulated
+   picture keeps its correct aspect ratio instead of being stretched to
+   fill a widescreen display. */
+int fs_dispx = 0, fs_dispy = 0, fs_dispw = FULLSCREEN_W, fs_disph = FULLSCREEN_H;
+
 uint8_t fontdata[] =
 {
 	0x00, 0x00, 0x00, 0x1c, 0x22, 0x02, 0x1a, 0x2a, 0x2a, 0x1c, 0x00, 0x00,
@@ -424,9 +434,9 @@ void drawline(int line)
 			blit(b, b2, 0, 0, 0, 0, 256, 192);
 			if (fullscreen)
 			{
-				stretch_blit(b2, screen, 0, 0, 256, 192, 0, 0, 1024, 768);
+				stretch_blit(b2, screen, 0, 0, 256, 192, fs_dispx, fs_dispy, fs_dispw, fs_disph);
 				if (tapeon)
-					rectfill(screen, 1000, 0, 1023, 8, makecol(255, 0, 0));
+					rectfill(screen, fs_dispx + fs_dispw - 24, fs_dispy, fs_dispx + fs_dispw - 1, fs_dispy + 8, makecol(255, 0, 0));
 			}
 			else
 			{
@@ -469,7 +479,7 @@ void enterfullscreen()
 	#endif
 
 	set_color_depth(depth);
-	set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, 1024, 768, 0, 0);
+	set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, FULLSCREEN_W, FULLSCREEN_H, 0, 0);
 
 	#ifdef WIN32
 	b2 = create_video_bitmap(256, 192);
@@ -477,6 +487,28 @@ void enterfullscreen()
 
 	set_color_depth(8);
 	updatepal();
+
+	/* Work out a centred 4:3 rectangle within whatever mode we actually
+	   got (SCREEN_W/SCREEN_H reflect the real mode, in case the driver
+	   couldn't grant exactly FULLSCREEN_W x FULLSCREEN_H), then paint
+	   everything outside it black so we get letterbox/pillarbox bars
+	   instead of a stretched, distorted picture. */
+	if (SCREEN_W * 3 >= SCREEN_H * 4)
+	{
+		/* Screen is same or wider than 4:3 -> fit to height, bars on left/right */
+		fs_disph = SCREEN_H;
+		fs_dispw = SCREEN_H * 4 / 3;
+	}
+	else
+	{
+		/* Screen is narrower than 4:3 -> fit to width, bars on top/bottom */
+		fs_dispw = SCREEN_W;
+		fs_disph = SCREEN_W * 3 / 4;
+	}
+	fs_dispx = (SCREEN_W - fs_dispw) / 2;
+	fs_dispy = (SCREEN_H - fs_disph) / 2;
+
+	clear_to_color(screen, makecol(0, 0, 0));
 }
 
 void leavefullscreen()

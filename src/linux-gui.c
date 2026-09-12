@@ -748,8 +748,8 @@ void entergui()
 	show_mouse(screen);
 	if (fullscreen)
 	{
-		bemgui[0].x = (1024 / 2) - 36;
-		bemgui[0].y = 768 - 8;
+		bemgui[0].x = fs_dispx + (fs_dispw / 2) - 36;
+		bemgui[0].y = fs_dispy + fs_disph - 8;
 	}
 	else
 	{

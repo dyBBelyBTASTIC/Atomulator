@@ -260,6 +260,7 @@ void saveconfig();
 
 extern int snow;
 extern int fullscreen;
+extern int fs_dispx, fs_dispy, fs_dispw, fs_disph;
 void enterfullscreen();
 void leavefullscreen();
 
